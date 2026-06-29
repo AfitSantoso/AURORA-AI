@@ -1,0 +1,239 @@
+<div class="dashboard-container">
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="page-title">
+      <h1>Dashboard</h1>
+      <p class="subtitle">Sistem Pemantauan Risiko Pembayaran Komisi Dealer</p>
+    </div>
+    
+    <div class="user-profile">
+      <div class="profile-info">
+        <span class="user-name">{{ currentUser?.name || 'BM Jakarta Selatan' }}</span>
+        <span class="user-role">{{ currentUser?.role || 'Deputy Director' }}</span>
+      </div>
+      <div class="profile-avatar">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      </div>
+      <button class="btn-logout" (click)="logout()" title="Keluar">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Realtime Notification Card -->
+  <div class="alert alert-interactive" *ngIf="activeAlertsCount > 0">
+    <div class="alert-content">
+      <div class="alert-icon">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="#e11d48" stroke-width="2" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+      </div>
+      <div class="alert-details">
+        <h4>{{ activeAlertsCount }} Transaksi Memerlukan Verifikasi AI</h4>
+        <p>Terdapat {{ pendingRMCount }} antrean verifikasi Regional Manager dan {{ pendingDDCount }} antrean verifikasi Deputy Director.</p>
+      </div>
+    </div>
+    <a routerLink="/alerts" class="btn btn-primary btn-sm">Tinjau Antrean</a>
+  </div>
+
+  <!-- Metrics Grid -->
+  <div class="grid grid-4 metrics-grid">
+    <div class="metric-card shadow-sm">
+      <div class="metric-header">
+        <span class="metric-title">Total Alert</span>
+        <span class="trend-badge trend-up">+16% dari periode lalu</span>
+      </div>
+      <div class="metric-value">{{ totalAlerts }}</div>
+    </div>
+    
+    <div class="metric-card shadow-sm border-high">
+      <div class="metric-header">
+        <span class="metric-title">High Risk</span>
+        <span class="trend-badge trend-up">+23% dari periode lalu</span>
+      </div>
+      <div class="metric-value text-high">{{ highRisk }}</div>
+    </div>
+    
+    <div class="metric-card shadow-sm border-medium">
+      <div class="metric-header">
+        <span class="metric-title">Medium Risk</span>
+        <span class="trend-badge trend-up">+12% dari periode lalu</span>
+      </div>
+      <div class="metric-value text-medium">{{ mediumRisk }}</div>
+    </div>
+    
+    <div class="metric-card shadow-sm border-low">
+      <div class="metric-header">
+        <span class="metric-title">Low Risk</span>
+        <span class="trend-badge trend-down">+18% dari periode lalu</span>
+      </div>
+      <div class="metric-value text-low">{{ lowRisk }}</div>
+    </div>
+  </div>
+
+  <!-- Charts Layout Grid -->
+  <div class="grid grid-2 charts-layout">
+    <!-- Trend Alert Card -->
+    <div class="card card-premium">
+      <div class="card-header">
+        <h3 class="card-title">Trend Alert 6 Bulan Terakhir</h3>
+        <div class="period-select">Periode: Des 2024 - Mei 2025</div>
+      </div>
+      <div class="chart-container">
+        <!-- SVG Line Chart Mock -->
+        <svg viewBox="0 0 500 240" class="line-chart">
+          <!-- Grid Lines -->
+          <line x1="40" y1="30" x2="480" y2="30" stroke="#f1f5f9" stroke-width="1"></line>
+          <line x1="40" y1="80" x2="480" y2="80" stroke="#f1f5f9" stroke-width="1"></line>
+          <line x1="40" y1="130" x2="480" y2="130" stroke="#f1f5f9" stroke-width="1"></line>
+          <line x1="40" y1="180" x2="480" y2="180" stroke="#f1f5f9" stroke-width="1"></line>
+          
+          <!-- Axes -->
+          <line x1="40" y1="200" x2="480" y2="200" stroke="#cbd5e1" stroke-width="1"></line>
+          
+          <!-- High Risk Line (Red) -->
+          <path d="M 60 120 L 140 100 L 220 150 L 300 90 L 380 70 L 460 50" fill="none" stroke="#dc3545" stroke-width="3"></path>
+          <!-- Medium Risk Line (Orange) -->
+          <path d="M 60 150 L 140 130 L 220 100 L 300 120 L 380 90 L 460 80" fill="none" stroke="#fd7e14" stroke-width="3"></path>
+          <!-- Low Risk Line (Green) -->
+          <path d="M 60 180 L 140 160 L 220 140 L 300 130 L 380 120 L 460 110" fill="none" stroke="#198754" stroke-width="3"></path>
+          
+          <!-- Data Circles (High Risk) -->
+          <circle cx="60" cy="120" r="4" fill="#dc3545"></circle>
+          <circle cx="140" cy="100" r="4" fill="#dc3545"></circle>
+          <circle cx="220" cy="150" r="4" fill="#dc3545"></circle>
+          <circle cx="300" cy="90" r="4" fill="#dc3545"></circle>
+          <circle cx="380" cy="70" r="4" fill="#dc3545"></circle>
+          <circle cx="460" cy="50" r="4" fill="#dc3545"></circle>
+          
+          <!-- X labels -->
+          <text x="60" y="220" text-anchor="middle" font-size="11" fill="#64748b">Des</text>
+          <text x="140" y="220" text-anchor="middle" font-size="11" fill="#64748b">Jan</text>
+          <text x="220" y="220" text-anchor="middle" font-size="11" fill="#64748b">Feb</text>
+          <text x="300" y="220" text-anchor="middle" font-size="11" fill="#64748b">Mar</text>
+          <text x="380" y="220" text-anchor="middle" font-size="11" fill="#64748b">Apr</text>
+          <text x="460" y="220" text-anchor="middle" font-size="11" fill="#64748b">Mei</text>
+          
+          <!-- Y labels -->
+          <text x="30" y="35" text-anchor="end" font-size="10" fill="#94a3b8">600</text>
+          <text x="30" y="85" text-anchor="end" font-size="10" fill="#94a3b8">400</text>
+          <text x="30" y="135" text-anchor="end" font-size="10" fill="#94a3b8">200</text>
+          <text x="30" y="185" text-anchor="end" font-size="10" fill="#94a3b8">0</text>
+        </svg>
+        
+        <div class="legend-container">
+          <span class="legend-item"><span class="dot bg-high"></span> High</span>
+          <span class="legend-item"><span class="dot bg-medium"></span> Medium</span>
+          <span class="legend-item"><span class="dot bg-low"></span> Low</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top 5 Cabang Card -->
+    <div class="card card-premium">
+      <div class="card-header">
+        <h3 class="card-title">Top 5 Cabang (Risiko Tertinggi)</h3>
+      </div>
+      <div class="branch-risk-list">
+        <div class="branch-item">
+          <div class="branch-info">
+            <span class="branch-name">1. Jakarta Selatan</span>
+            <span class="branch-val">92 alert</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress bg-high" style="width: 92%"></div>
+          </div>
+        </div>
+        <div class="branch-item">
+          <div class="branch-info">
+            <span class="branch-name">2. Surabaya Barat</span>
+            <span class="branch-val">88 alert</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress bg-high" style="width: 88%"></div>
+          </div>
+        </div>
+        <div class="branch-item">
+          <div class="branch-info">
+            <span class="branch-name">3. Medan</span>
+            <span class="branch-val">75 alert</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress bg-medium" style="width: 75%"></div>
+          </div>
+        </div>
+        <div class="branch-item">
+          <div class="branch-info">
+            <span class="branch-name">4. Bandung</span>
+            <span class="branch-val">72 alert</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress bg-medium" style="width: 72%"></div>
+          </div>
+        </div>
+        <div class="branch-item">
+          <div class="branch-info">
+            <span class="branch-name">5. Makassar</span>
+            <span class="branch-val">68 alert</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress bg-low" style="width: 68%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-2 charts-layout-bottom">
+    <!-- Jenis Alert Terbanyak Card -->
+    <div class="card card-premium">
+      <div class="card-header">
+        <h3 class="card-title">Jenis Alert Terbanyak</h3>
+      </div>
+      <div class="donut-chart-container">
+        <div class="chart-donut">
+          <svg viewBox="0 0 160 160" width="160" height="160">
+            <!-- Donut path -->
+            <circle cx="80" cy="80" r="50" fill="transparent" stroke="#f1f5f9" stroke-width="25"></circle>
+            <!-- 48% Segment (Blue) -->
+            <circle cx="80" cy="80" r="50" fill="transparent" stroke="#0c3c86" stroke-width="25" stroke-dasharray="150.8 314.15" stroke-dashoffset="0" transform="rotate(-90 80 80)"></circle>
+            <!-- 28% Segment (Purple) -->
+            <circle cx="80" cy="80" r="50" fill="transparent" stroke="#7c3aed" stroke-width="25" stroke-dasharray="87.9 314.15" stroke-dashoffset="-150.8" transform="rotate(-90 80 80)"></circle>
+            <!-- 14% Segment (Orange) -->
+            <circle cx="80" cy="80" r="50" fill="transparent" stroke="#fd7e14" stroke-width="25" stroke-dasharray="44 314.15" stroke-dashoffset="-238.7" transform="rotate(-90 80 80)"></circle>
+            <!-- 10% Segment (Gray) -->
+            <circle cx="80" cy="80" r="50" fill="transparent" stroke="#94a3b8" stroke-width="25" stroke-dasharray="31.4 314.15" stroke-dashoffset="-282.7" transform="rotate(-90 80 80)"></circle>
+          </svg>
+          <div class="donut-label">
+            <span class="donut-val">48%</span>
+            <span class="donut-sub">Angsuran</span>
+          </div>
+        </div>
+        
+        <div class="chart-legend-grid">
+          <div class="legend-item"><span class="dot" style="background-color: #0c3c86;"></span> Pembayaran Angsuran Non Debitur</div>
+          <div class="legend-item"><span class="dot" style="background-color: #7c3aed;"></span> Refund Dealer</div>
+          <div class="legend-item"><span class="dot" style="background-color: #fd7e14;"></span> Rekening Mismatch</div>
+          <div class="legend-item"><span class="dot" style="background-color: #94a3b8;"></span> Lainnya</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Potensi Kerugian YTD Card -->
+    <div class="card card-premium">
+      <div class="card-header">
+        <h3 class="card-title">Potensi Kerugian (YTD)</h3>
+      </div>
+      <div class="loss-container">
+        <div class="loss-meta">
+          <div class="loss-value">Rp 70,2 M</div>
+          <span class="trend-badge trend-up">+22% dari periode lalu</span>
+        </div>
+        <div class="mini-chart-container">
+          <svg viewBox="0 0 300 80" class="mini-chart">
+            <path d="M 0 60 L 50 55 L 100 45 L 150 52 L 200 35 L 250 20 L 300 10" fill="none" stroke="#2b6cb0" stroke-width="3"></path>
+            <circle cx="300" cy="10" r="4" fill="#2b6cb0"></circle>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

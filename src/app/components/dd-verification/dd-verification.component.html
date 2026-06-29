@@ -1,0 +1,164 @@
+<div class="dd-container" *ngIf="alert">
+  <!-- Top Nav Bar -->
+  <div class="top-nav">
+    <a [routerLink]="['/alerts', alert.id, 'rm-verification']" class="back-link">
+      <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span>Kembali</span>
+    </a>
+    <div class="page-title">
+      <h2>Verifikasi Alert</h2>
+      <p class="subtitle">Workspace Persetujuan Deputy Director</p>
+    </div>
+    <span class="badge badge-header badge-high">{{ alert.riskLevel }} RISK</span>
+  </div>
+
+  <div class="grid grid-2 dd-grid">
+    <!-- Left Column: RM Summary & DD Notes -->
+    <div class="col-left">
+      <!-- RM Verification Summary -->
+      <div class="card card-premium rm-summary-card">
+        <div class="card-header">
+          <h3 class="card-title">Ringkasan Verifikasi RM</h3>
+        </div>
+        <div class="summary-details" *ngIf="alert.rmDecision; else noRmDecision">
+          <div class="summary-row">
+            <span class="summary-label">Keputusan RM</span>
+            <span class="badge badge-medium">{{ alert.rmDecision.decision }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Tanggal Peninjauan</span>
+            <span class="summary-value">{{ alert.rmDecision.date }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Ditinjau Oleh</span>
+            <span class="summary-value">{{ alert.rmDecision.by }}</span>
+          </div>
+          <div class="notes-display-box">
+            <h4 class="notes-box-title">Catatan RM:</h4>
+            <p class="notes-box-content">" {{ alert.rmDecision.notes }} "</p>
+          </div>
+        </div>
+        <ng-template #noRmDecision>
+          <p class="text-muted text-center py-4">Belum ada catatan verifikasi dari Regional Manager.</p>
+        </ng-template>
+      </div>
+
+      <!-- DD Notes Field -->
+      <div class="card card-premium notes-card">
+        <div class="card-header">
+          <h3 class="card-title">Catatan Deputy Director</h3>
+        </div>
+        <div class="form-group">
+          <textarea 
+            class="form-control notes-textarea" 
+            rows="8" 
+            placeholder="Tulis catatan keputusan di sini..." 
+            [(ngModel)]="notes"
+            maxLength="500"></textarea>
+          <div class="char-count">{{ notes.length }} / 500</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: AI Summary, Recommendations, & Final Decision -->
+    <div class="col-right">
+      <!-- AI Risk Summary -->
+      <div class="card card-premium risk-summary-card">
+        <div class="card-header">
+          <h3 class="card-title">AI Risk Summary</h3>
+        </div>
+        
+        <div class="risk-summary-row">
+          <div class="score-display-mini" [ngClass]="{
+            'border-high': alert.riskLevel === 'High',
+            'border-medium': alert.riskLevel === 'Medium',
+            'border-low': alert.riskLevel === 'Low'
+          }">
+            <span class="score-num-mini" [ngClass]="{
+              'text-high': alert.riskLevel === 'High',
+              'text-medium': alert.riskLevel === 'Medium',
+              'text-low': alert.riskLevel === 'Low'
+            }">{{ alert.riskScore }}</span>
+            <span class="score-total-mini">/100</span>
+          </div>
+          <span class="badge" [ngClass]="{
+            'badge-high': alert.riskLevel === 'High',
+            'badge-medium': alert.riskLevel === 'Medium',
+            'badge-low': alert.riskLevel === 'Low'
+          }">{{ alert.riskLevel }} Risk</span>
+        </div>
+
+        <ul class="findings-list mt-4">
+          <li class="finding-item" *ngFor="let reason of alert.aiReasons">
+            <span class="finding-icon">
+              <svg viewBox="0 0 24 24" width="14" height="14" stroke="#dc3545" stroke-width="2.5" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </span>
+            <span class="finding-text text-sm">{{ reason }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- AI Recommendation -->
+      <div class="card card-premium recommendation-card">
+        <div class="card-header">
+          <h3 class="card-title">Rekomendasi AI</h3>
+        </div>
+        <div class="rec-box">
+          <div class="rec-icon">
+            <svg viewBox="0 0 24 24" width="32" height="32" stroke="#2563eb" stroke-width="1.5" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><circle cx="12" cy="11" r="3"></circle><line x1="12" y1="14" x2="12.01" y2="14"></line></svg>
+          </div>
+          <div class="rec-text">
+            <h4>Tunda Pembayaran</h4>
+            <p>Tunda pembayaran refund dan lakukan investigasi lebih lanjut sebelum menyetujui transaksi komisi dealer.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Final Decision -->
+      <div class="card card-premium final-decision-card">
+        <div class="card-header">
+          <h3 class="card-title">Keputusan Akhir</h3>
+        </div>
+        <div class="decision-options">
+          <label class="decision-option">
+            <input type="radio" name="dd-decision" value="Setuju & Lanjutkan" [(ngModel)]="decision" class="form-radio">
+            <div class="option-details">
+              <span class="option-title text-success">Setuju & Lanjutkan</span>
+              <span class="option-sub">Lepaskan blokir, proses bayar, dan simpan rekening ke Trusted Repository</span>
+            </div>
+          </label>
+          
+          <label class="decision-option">
+            <input type="radio" name="dd-decision" value="Tunda / Freeze" [(ngModel)]="decision" class="form-radio">
+            <div class="option-details">
+              <span class="option-title">Tunda / Freeze Refund</span>
+              <span class="option-sub">Tunda pembayaran hingga waktu yang tidak ditentukan</span>
+            </div>
+          </label>
+
+          <label class="decision-option">
+            <input type="radio" name="dd-decision" value="Escalate ke Audit" [(ngModel)]="decision" class="form-radio">
+            <div class="option-details">
+              <span class="option-title">Escalate ke Audit</span>
+              <span class="option-sub">Eskalasi temuan ini ke departemen Audit internal</span>
+            </div>
+          </label>
+
+          <label class="decision-option">
+            <input type="radio" name="dd-decision" value="Tolak" [(ngModel)]="decision" class="form-radio">
+            <div class="option-details">
+              <span class="option-title text-danger">Tolak</span>
+              <span class="option-sub">Tolak transaksi secara absolut dan batalkan pembayaran</span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Actions -->
+  <div class="action-footer card shadow-sm text-right">
+    <div></div> <!-- Empty for alignment -->
+    <button class="btn btn-primary" (click)="saveDecision()">Simpan Keputusan</button>
+  </div>
+</div>

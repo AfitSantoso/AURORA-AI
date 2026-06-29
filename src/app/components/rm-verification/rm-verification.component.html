@@ -1,0 +1,210 @@
+<div class="rm-container" *ngIf="alert">
+  <!-- Top Nav Bar -->
+  <div class="top-nav">
+    <a [routerLink]="['/alerts', alert.id]" class="back-link">
+      <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span>Kembali</span>
+    </a>
+    <div class="page-title">
+      <h2>Verifikasi Alert</h2>
+      <p class="subtitle">Workspace Peninjauan Regional Manager</p>
+    </div>
+    <span class="badge badge-header badge-high">{{ alert.riskLevel }} RISK</span>
+  </div>
+
+  <div class="grid grid-2 rm-grid">
+    <!-- Left Column: Alert Info & Notes -->
+    <div class="col-left">
+      <div class="card card-premium">
+        <div class="card-header">
+          <h3 class="card-title">Informasi Alert</h3>
+        </div>
+        <div class="info-list">
+          <div class="info-row">
+            <span class="info-label">No. Alert</span>
+            <span class="info-value font-semibold">{{ alert.id }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Nama Penerima</span>
+            <span class="info-value font-medium">{{ alert.recipientName }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Rekening Tujuan</span>
+            <span class="info-value text-mono">{{ alert.targetAccount }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Dealer</span>
+            <span class="info-value">{{ alert.dealerName }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Cabang</span>
+            <span class="info-value">{{ alert.branch }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Risk Score</span>
+            <span class="info-value font-bold text-high">{{ alert.riskScore }} / 100</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes Field -->
+      <div class="card card-premium notes-card">
+        <div class="card-header">
+          <h3 class="card-title">Catatan Verifikasi</h3>
+        </div>
+        <div class="form-group">
+          <textarea 
+            class="form-control notes-textarea" 
+            rows="8" 
+            placeholder="Tulis catatan verifikasi di sini..." 
+            [(ngModel)]="notes"
+            maxLength="500"></textarea>
+          <div class="char-count">{{ notes.length }} / 500</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Findings, Documents & Decision -->
+    <div class="col-right">
+      <!-- AI Findings -->
+      <div class="card card-premium findings-card">
+        <div class="card-header">
+          <h3 class="card-title">AI Findings</h3>
+        </div>
+        <ul class="findings-list">
+          <li class="finding-item" *ngFor="let reason of alert.aiReasons">
+            <span class="finding-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="#ea580c" stroke-width="2" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </span>
+            <span class="finding-text">{{ reason }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Supporting Documents -->
+      <div class="card card-premium docs-card">
+        <div class="card-header">
+          <h3 class="card-title">Dokumen Pendukung</h3>
+        </div>
+        <div class="docs-list">
+          <div class="doc-item">
+            <span class="doc-name font-medium">Bukti Transaksi</span>
+            <button class="btn btn-secondary btn-sm" (click)="showDocument('Bukti Transaksi')">Lihat</button>
+          </div>
+          <div class="doc-item">
+            <span class="doc-name font-medium">Data Rekening</span>
+            <button class="btn btn-secondary btn-sm" (click)="showDocument('Data Rekening')">Lihat</button>
+          </div>
+          <div class="doc-item">
+            <span class="doc-name font-medium">Profil Dealer</span>
+            <button class="btn btn-secondary btn-sm" (click)="showDocument('Profil Dealer')">Lihat</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Decisions Panel -->
+      <div class="card card-premium decision-card">
+        <div class="card-header">
+          <h3 class="card-title">Keputusan</h3>
+        </div>
+        <div class="decision-options">
+          <label class="decision-option">
+            <input type="radio" name="rm-decision" value="Approve" [(ngModel)]="decision" class="form-radio">
+            <div class="option-details">
+              <span class="option-title">Approve (Aman)</span>
+              <span class="option-sub">Lolos verifikasi dan aman dibayarkan</span>
+            </div>
+          </label>
+          
+          <label class="decision-option">
+            <input type="radio" name="rm-decision" value="Request Evidence" [(ngModel)]="decision" class="form-radio">
+            <div class="option-details">
+              <span class="option-title">Request Evidence</span>
+              <span class="option-sub">Meminta dokumen tambahan dari dealer</span>
+            </div>
+          </label>
+
+          <label class="decision-option">
+            <input type="radio" name="rm-decision" value="Investigasi" [(ngModel)]="decision" class="form-radio">
+            <div class="option-details">
+              <span class="option-title">Investigasi</span>
+              <span class="option-sub">Penyelidikan mendalam lebih lanjut</span>
+            </div>
+          </label>
+
+          <label class="decision-option">
+            <input type="radio" name="rm-decision" value="Freeze Refund" [(ngModel)]="decision" class="form-radio">
+            <div class="option-details">
+              <span class="option-title">Freeze Refund</span>
+              <span class="option-sub">Bekukan dana refund sementara</span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Actions -->
+  <div class="action-footer card shadow-sm">
+    <button class="btn btn-danger btn-outline" (click)="rejectAndReturn()">Tolak & Kembalikan</button>
+    <button class="btn btn-primary" (click)="sendToDeputyDirector()">Kirim ke Deputy Director</button>
+  </div>
+
+  <!-- Document Modal Viewer -->
+  <div class="modal-overlay" *ngIf="activeDoc" (click)="closeDocument()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Pratinjau Dokumen: {{ activeDoc }}</h3>
+        <button class="btn-close" (click)="closeDocument()">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <!-- Mock doc content based on name -->
+        <div *ngIf="activeDoc === 'Bukti Transaksi'" class="mock-document invoice-doc">
+          <div class="doc-header">
+            <h4>BCA FINANCE</h4>
+            <p>BUKTI TRANSAKSI TRANSFER</p>
+          </div>
+          <div class="doc-body text-left">
+            <p><strong>No. Transaksi:</strong> TR-9981881</p>
+            <p><strong>Tanggal:</strong> 24 Mei 2025 10:43</p>
+            <p><strong>Nama Penerima:</strong> {{ alert.recipientName }}</p>
+            <p><strong>Rekening Tujuan:</strong> {{ alert.targetAccount }}</p>
+            <p><strong>Nominal:</strong> Rp 15.000.000</p>
+            <p><strong>Status:</strong> Pending (Review)</p>
+          </div>
+        </div>
+
+        <div *ngIf="activeDoc === 'Data Rekening'" class="mock-document bankbook-doc">
+          <div class="doc-header">
+            <h4>BUKU TABUNGAN MANDIRI / BCA</h4>
+            <p>FOTO COPY DOKUMEN REKENING DEALER</p>
+          </div>
+          <div class="doc-body text-left">
+            <p><strong>Nama Pemilik:</strong> {{ alert.recipientName }}</p>
+            <p><strong>Nomor Rekening:</strong> {{ alert.targetAccount }}</p>
+            <p><strong>Cabang Bank:</strong> Jakarta KCP Hayam Wuruk</p>
+            <p><strong>Validitas Dokumen:</strong> Asli (Vision AI Score: 98%)</p>
+          </div>
+        </div>
+
+        <div *ngIf="activeDoc === 'Profil Dealer'" class="mock-document profile-doc">
+          <div class="doc-header">
+            <h4>PROFIL INTERNAL DEALER</h4>
+            <p>DATABASE INTERNAL BCAF</p>
+          </div>
+          <div class="doc-body text-left">
+            <p><strong>Nama Dealer:</strong> {{ alert.dealerName }}</p>
+            <p><strong>Pemilik/Owner:</strong> Budi Hartanto</p>
+            <p><strong>PIC Terdaftar:</strong> Andi Setiawan (Sales Supervisor)</p>
+            <p><strong>Relasi Rekening:</strong> Rekening baru terdaftar merupakan rekening pribadi PIC, bukan rekening PT/CV Dealer.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeDocument()">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>

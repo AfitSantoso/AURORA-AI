@@ -1,0 +1,145 @@
+<div class="alert-list-container">
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="page-title">
+      <h1>Alert List</h1>
+      <p class="subtitle">Daftar Peringatan Risiko Transaksi Pembayaran Komisi</p>
+    </div>
+    
+    <div class="user-info-bar">
+      <div class="profile-avatar-mini">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      </div>
+      <span>BM Jakarta Selatan</span>
+    </div>
+  </div>
+
+  <!-- Filters Row -->
+  <div class="filters-card card shadow-sm">
+    <div class="filters-wrapper">
+      <div class="filter-item">
+        <select class="form-control select-filter" [(ngModel)]="selectedStatus" (change)="applyFilters()">
+          <option value="">Semua Status</option>
+          <option value="New">New</option>
+          <option value="In Review">In Review</option>
+          <option value="Closed">Closed</option>
+        </select>
+      </div>
+      
+      <div class="filter-item">
+        <select class="form-control select-filter" [(ngModel)]="selectedRisk" (change)="applyFilters()">
+          <option value="">Semua Risiko</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+      </div>
+      
+      <div class="filter-item">
+        <select class="form-control select-filter" [(ngModel)]="selectedType" (change)="applyFilters()">
+          <option value="">Semua Jenis</option>
+          <option value="Pembayaran Angsuran Non Debitur">Pembayaran Angsuran</option>
+          <option value="Refund Dealer">Refund Dealer</option>
+          <option value="Rekening Mismatch">Rekening Mismatch</option>
+        </select>
+      </div>
+
+      <div class="filter-item search-item">
+        <div class="search-input-wrapper">
+          <input 
+            type="text" 
+            class="form-control search-input" 
+            placeholder="Cari alert, nama, rekening, dealer..."
+            [(ngModel)]="searchQuery"
+            (input)="applyFilters()">
+          <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert Table Card -->
+  <div class="card card-premium">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>No. Alert</th>
+            <th>Tanggal</th>
+            <th>Jenis Alert</th>
+            <th>Nama Penerima</th>
+            <th>Rekening Tujuan</th>
+            <th>Dealer / Showroom</th>
+            <th class="text-center">Risk Score</th>
+            <th>Risiko</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let alert of displayedAlerts" class="clickable-row" (click)="viewDetail(alert.id)">
+            <td class="font-semibold text-primary-color">{{ alert.id }}</td>
+            <td class="text-secondary-color">{{ alert.date }}</td>
+            <td>
+              <div class="type-indicator">
+                <span class="type-dot"></span>
+                <span>{{ alert.alertType }}</span>
+              </div>
+            </td>
+            <td class="font-medium">{{ alert.recipientName }}</td>
+            <td class="text-mono">{{ alert.targetAccount }}</td>
+            <td>{{ alert.dealerName }} <span class="branch-tag">{{ alert.branch }}</span></td>
+            <td class="text-center font-bold" [ngClass]="{
+              'text-high': alert.riskLevel === 'High',
+              'text-medium': alert.riskLevel === 'Medium',
+              'text-low': alert.riskLevel === 'Low'
+            }">{{ alert.riskScore }}</td>
+            <td>
+              <span class="badge" [ngClass]="{
+                'badge-high': alert.riskLevel === 'High',
+                'badge-medium': alert.riskLevel === 'Medium',
+                'badge-low': alert.riskLevel === 'Low'
+              }">{{ alert.riskLevel }}</span>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="{
+                'badge-new': alert.status === 'New',
+                'badge-review': alert.status === 'In Review',
+                'badge-closed': alert.status === 'Closed'
+              }">{{ alert.status }}</span>
+            </td>
+          </tr>
+          <tr *ngIf="displayedAlerts.length === 0">
+            <td colspan="9" class="text-center text-muted py-8">
+              Tidak ada data alert transaksi yang cocok dengan kriteria filter.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-container" *ngIf="filteredAlerts.length > 0">
+      <div class="pagination-info">
+        Menampilkan {{ (currentPage - 1) * pageSize + 1 }} - {{ Math.min(currentPage * pageSize, filteredAlerts.length) }} dari {{ filteredAlerts.length }} data
+      </div>
+      
+      <div class="pagination-buttons">
+        <button class="btn-page" (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        
+        <button 
+          *ngFor="let page of getPagesArray()" 
+          class="btn-page-number" 
+          [class.active]="page === currentPage"
+          (click)="setPage(page)">
+          {{ page }}
+        </button>
+        
+        <button class="btn-page" (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,484 @@
+<div class="onboarding-container">
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="page-title">
+      <h1>Registrasi Rekening Dealer</h1>
+      <p class="subtitle">One-Time Onboarding Rekening ke Trusted Repository</p>
+    </div>
+    <div class="user-info-bar">
+      <span>BM Jakarta Selatan</span>
+    </div>
+  </div>
+
+  <!-- Tab Switcher -->
+  <div class="tabs-container">
+    <button class="tab-btn" [class.active]="activeTab === 'penny'" (click)="switchTab('penny')">
+      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+      Opsi 1: Validasi Penny Drop / Inquiry
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'vision'" (click)="switchTab('vision')">
+      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+      Opsi 2: Validasi Dokumen (Vision AI)
+    </button>
+  </div>
+
+  <!-- TAB 1: PENNY DROP -->
+  <div class="tab-content" *ngIf="activeTab === 'penny'">
+    <div class="grid grid-4 step-indicator-bar">
+      <div class="step-badge" [class.active]="pennyStep >= 1"><span class="step-num">1</span> Input Rekening</div>
+      <div class="step-badge" [class.active]="pennyStep >= 2"><span class="step-num">2</span> Penny Drop</div>
+      <div class="step-badge" [class.active]="pennyStep >= 3"><span class="step-num">3</span> Hasil Inquiry</div>
+      <div class="step-badge" [class.active]="pennyStep >= 4"><span class="step-num">4</span> AI Matching</div>
+    </div>
+
+    <!-- Step 1: Input Form -->
+    <div class="card card-premium onboarding-card" *ngIf="pennyStep === 1">
+      <div class="card-header">
+        <h3 class="card-title">Tambah Rekening Dealer</h3>
+      </div>
+      <form (ngSubmit)="startPennyDrop()" #pennyFormObj="ngForm">
+        <div class="grid grid-2">
+          <div class="form-group">
+            <label class="form-label">Nama Pemilik Rekening</label>
+            <input type="text" class="form-control" name="ownerName" [(ngModel)]="pennyForm.ownerName" required placeholder="Masukkan Nama Sesuai Bank">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nama Dealer / Showroom</label>
+            <input type="text" class="form-control" name="dealerName" [(ngModel)]="pennyForm.dealerName" required placeholder="Masukkan Nama Dealer">
+          </div>
+        </div>
+        
+        <div class="grid grid-2">
+          <div class="form-group">
+            <label class="form-label">Bank</label>
+            <select class="form-control" name="bank" [(ngModel)]="pennyForm.bank">
+              <option value="Mandiri">Bank Mandiri</option>
+              <option value="BCA">Bank BCA</option>
+              <option value="BNI">Bank BNI</option>
+              <option value="BRI">Bank BRI</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nomor Rekening</label>
+            <input type="text" class="form-control" name="accountNumber" [(ngModel)]="pennyForm.accountNumber" required placeholder="Masukkan Nomor Rekening">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Penerima Notifikasi (Opsional)</label>
+          <input type="email" class="form-control" name="email" [(ngModel)]="pennyForm.email" placeholder="e.g. dealer@email.com">
+        </div>
+
+        <div class="form-group mt-4">
+          <label class="form-check">
+            <input type="checkbox" name="agree" [(ngModel)]="pennyForm.agree" required class="form-check-input">
+            <span class="form-check-label">Saya menyatakan data di atas benar dan valid untuk komisi.</span>
+          </label>
+        </div>
+
+        <div class="form-actions-right">
+          <button type="submit" [disabled]="!pennyFormObj.valid" class="btn btn-primary">Lanjutkan</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Step 2: Penny Drop Loader -->
+    <div class="card card-premium onboarding-card text-center py-8" *ngIf="pennyStep === 2">
+      <div class="penny-drop-animation">
+        <div class="bank-icon-pulse">
+          <svg viewBox="0 0 24 24" width="48" height="48" stroke="#0c3c86" stroke-width="1.5" fill="none"><path d="M3 22h18F"></path><line x1="6" y1="18" x2="6" y2="11"></line><line x1="10" y1="18" x2="10" y2="11"></line><line x1="14" y1="18" x2="14" y2="11"></line><line x1="18" y1="18" x2="18" y2="11"></line><path d="M12 2L2 7v3h20V7L12 2z"></path></svg>
+        </div>
+        <div class="circular-progress-loop">
+          <span class="rp-text">Rp 1</span>
+        </div>
+      </div>
+      <h3 class="mt-4 font-bold">Proses Validasi Rekening</h3>
+      <p class="text-secondary text-sm">Sistem melakukan transfer penny drop / inquiry ke rekening tujuan...</p>
+      
+      <div class="progress-container-onboard mt-6">
+        <div class="progress-bar-onboard">
+          <div class="progress-fill-onboard" [style.width.%]="pennyProgress"></div>
+        </div>
+        <span class="progress-percentage">Sedang memproses... {{ pennyProgress }}%</span>
+      </div>
+    </div>
+
+    <!-- Step 3: Hasil Inquiry dari Bank -->
+    <div class="card card-premium onboarding-card" *ngIf="pennyStep === 3">
+      <div class="inquiry-success-badge">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="#198754" stroke-width="3" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span>Inquiry Berhasil</span>
+      </div>
+      
+      <h3 class="inquiry-title">Hasil Inquiry dari Bank</h3>
+      <p class="inquiry-subtitle">Informasi diterima dari bank tujuan</p>
+      
+      <div class="info-list inquiry-list card">
+        <div class="info-row">
+          <span class="info-label">Nama Pemilik Rekening (dari bank)</span>
+          <span class="info-value font-bold text-success">{{ pennyForm.ownerName | uppercase }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Bank</span>
+          <span class="info-value">{{ pennyForm.bank }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Nomor Rekening</span>
+          <span class="info-value text-mono">{{ pennyForm.accountNumber }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Waktu Inquiry</span>
+          <span class="info-value text-muted">{{ inquiryTime }}</span>
+        </div>
+      </div>
+
+      <div class="form-actions-right mt-6">
+        <button class="btn btn-primary" (click)="proceedToPennyAi()">Lanjutkan ke Validasi AI</button>
+      </div>
+    </div>
+
+    <!-- Step 4: AI Matching & Hasil Validasi -->
+    <div class="card card-premium onboarding-card" *ngIf="pennyStep === 4">
+      <div class="ai-header">
+        <h3 class="card-title">Hasil Validasi AI</h3>
+        <p class="subtitle">Perbandingan nama input vs bank & rekomendasi</p>
+      </div>
+
+      <div class="ai-content-wrapper grid grid-2">
+        <div class="ai-score-donut">
+          <div class="score-circle-green">
+            <span class="score-percent">98%</span>
+            <span class="score-label">Similarity</span>
+          </div>
+          <span class="badge badge-low mt-4">Sangat Tinggi</span>
+        </div>
+
+        <div class="ai-comparison-details">
+          <div class="comparison-row">
+            <span class="comp-label">Nama Input</span>
+            <span class="comp-val">{{ pennyForm.ownerName | uppercase }}</span>
+          </div>
+          <div class="comparison-row">
+            <span class="comp-label">Nama dari Bank</span>
+            <span class="comp-val">{{ pennyForm.ownerName | uppercase }}</span>
+          </div>
+          <div class="comparison-row">
+            <span class="comp-label">Similarity Score</span>
+            <span class="comp-val text-success font-bold">98%</span>
+          </div>
+          
+          <div class="verification-statement mt-4">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Rekening valid dan sesuai dengan nama pemilik dealer.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions-right mt-8">
+        <button class="btn btn-primary" (click)="savePennyToRepository()">Simpan ke Repository</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: VISION AI -->
+  <div class="tab-content" *ngIf="activeTab === 'vision'">
+    <div class="grid grid-3 step-indicator-bar">
+      <div class="step-badge" [class.active]="visionStep >= 1"><span class="step-num">1</span> Upload Dokumen</div>
+      <div class="step-badge" [class.active]="visionStep >= 2"><span class="step-num">2</span> AI Scan</div>
+      <div class="step-badge" [class.active]="visionStep >= 3"><span class="step-num">3</span> Validasi AI</div>
+    </div>
+
+    <!-- Step 1: Upload Panel -->
+    <div class="card card-premium onboarding-card" *ngIf="visionStep === 1">
+      <div class="card-header">
+        <h3 class="card-title">Upload Dokumen Rekening</h3>
+        <p class="subtitle">Unggah bukti rekening koran atau buku tabungan dealer</p>
+      </div>
+      
+      <div class="upload-dropzone" (click)="triggerUploadClick()">
+        <input type="file" id="file-upload-input" (change)="onFileSelect($event)" class="file-input-hidden" accept="image/*,.pdf">
+        <div class="upload-icon">
+          <svg viewBox="0 0 24 24" width="48" height="48" stroke="#0c3c86" stroke-width="1.5" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        </div>
+        <h4>Drag & drop file di sini atau klik untuk memilih file</h4>
+        <p class="text-muted text-xs">Format yang didukung: JPG, PNG, PDF. Maksimal 10MB.</p>
+      </div>
+
+      <div class="selected-file-row card mt-4" *ngIf="selectedFile">
+        <div class="file-info-col">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="#0c3c86" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          <span class="file-name font-medium">{{ selectedFile.name }}</span>
+          <span class="file-size text-muted">({{ selectedFile.size }})</span>
+        </div>
+        <button class="btn-remove-file" (click)="selectedFile = null">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="form-actions-right mt-6">
+        <button class="btn btn-primary" [disabled]="!selectedFile" (click)="processDocument()">Proses Dokumen</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Scanning Page -->
+    <div class="card card-premium onboarding-card text-center py-8" *ngIf="visionStep === 2">
+      <div class="scanning-graphics-container">
+        <div class="mock-bankbook-card">
+          <div class="scanner-line"></div>
+          <div class="bankbook-logo">mandiri</div>
+          <div class="bankbook-row-line width-70"></div>
+          <div class="bankbook-row-line width-50"></div>
+          <div class="bankbook-row-line width-80"></div>
+        </div>
+      </div>
+
+      <h3 class="mt-6 font-bold">Vision AI Memproses Dokumen</h3>
+      <p class="text-secondary text-sm">Vision AI sedang membaca logo bank, mengekstrak teks, dan memverifikasi keaslian...</p>
+
+      <div class="scanning-checklist mt-6">
+        <div class="check-item" [class.checked]="visionProgress >= 20">
+          <span class="check-dot"></span>
+          <span>Mendeteksi logo bank</span>
+        </div>
+        <div class="check-item" [class.checked]="visionProgress >= 50">
+          <span class="check-dot"></span>
+          <span>Membaca teks dokumen</span>
+        </div>
+        <div class="check-item" [class.checked]="visionProgress >= 75">
+          <span class="check-dot"></span>
+          <span>Mengekstrak informasi rekening</span>
+        </div>
+        <div class="check-item" [class.checked]="visionProgress >= 100">
+          <span class="check-dot"></span>
+          <span>Memverifikasi keaslian dokumen</span>
+        </div>
+      </div>
+
+      <div class="progress-container-onboard mt-6">
+        <div class="progress-bar-onboard">
+          <div class="progress-fill-onboard" [style.width.%]="visionProgress"></div>
+        </div>
+        <span class="progress-percentage">Menganalisis dokumen... {{ visionProgress }}%</span>
+      </div>
+    </div>
+
+    <!-- Step 3: Result & Heatmap Page -->
+    <div class="vision-results-layout" *ngIf="visionStep === 3">
+      <div class="grid grid-2">
+        <!-- Result Values -->
+        <div class="card card-premium">
+          <div class="card-header">
+            <h3 class="card-title">Hasil Ekstraksi & Validasi AI</h3>
+          </div>
+          
+          <div class="ai-score-donut py-4 border-bottom">
+            <div class="score-circle-green">
+              <span class="score-percent">96%</span>
+              <span class="score-label">Match Score</span>
+            </div>
+            <span class="badge badge-low mt-4">Sangat Tinggi</span>
+          </div>
+
+          <div class="info-list mt-4">
+            <div class="info-row">
+              <span class="info-label">Nama Pemilik Rekening</span>
+              <span class="info-value font-bold">{{ extractedData.ownerName }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Bank</span>
+              <span class="info-value font-medium">{{ extractedData.bank }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Nomor Rekening</span>
+              <span class="info-value text-mono">{{ extractedData.accountNumber }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Jenis Rekening</span>
+              <span class="info-value">{{ extractedData.accountType }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Cabang</span>
+              <span class="info-value">{{ extractedData.branch }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Tanggal Dokumen</span>
+              <span class="info-value">{{ extractedData.docDate }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Keaslian Dokumen</span>
+              <span class="info-value"><span class="badge badge-low">Asli (98%)</span></span>
+            </div>
+          </div>
+
+          <div class="verification-checks mt-4">
+            <div class="check-row">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Nama sesuai master data dealer</span>
+            </div>
+            <div class="check-row">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Dokumen asli / legal</span>
+            </div>
+            <div class="check-row">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Konsistensi informasi internal bank</span>
+            </div>
+          </div>
+
+          <div class="action-row mt-6">
+            <button class="btn btn-primary btn-block" (click)="saveVisionToRepository()">Simpan ke Repository</button>
+          </div>
+        </div>
+
+        <!-- Heatmap Display -->
+        <div class="card card-premium">
+          <div class="card-header">
+            <h3 class="card-title">Detail Dokumen & Analisis AI</h3>
+          </div>
+          
+          <div class="heatmap-visual-wrapper">
+            <!-- Simulated document scan card -->
+            <div class="bankbook-scan-card">
+              <div class="scan-card-header">
+                <span class="scan-bank-logo">mandiri</span>
+                <span class="scan-doc-type">Buku Tabungan</span>
+              </div>
+              <div class="scan-card-body">
+                <div class="scan-info-line highlight-bank">
+                  <span class="highlight-label">BANK</span>
+                  <span class="scan-value font-bold">Bank Mandiri KCP Jakarta Hayam Wuruk</span>
+                </div>
+                
+                <div class="scan-info-line highlight-name">
+                  <span class="highlight-label">NAMA</span>
+                  <span class="scan-value font-bold">ANDI SETIAWAN</span>
+                </div>
+                
+                <div class="scan-info-line highlight-no">
+                  <span class="highlight-label">NO REK</span>
+                  <span class="scan-value text-mono">1234 5678 9010</span>
+                </div>
+                
+                <div class="scan-info-line highlight-branch">
+                  <span class="highlight-label">CABANG</span>
+                  <span class="scan-value">Jakarta Barat</span>
+                </div>
+              </div>
+              
+              <div class="scan-card-footer">
+                <span class="stamp-verified">VERIFIED BY AI</span>
+              </div>
+            </div>
+
+            <!-- Legends for Heatmap -->
+            <div class="heatmap-legends">
+              <span class="legend-box hl-name">Nama</span>
+              <span class="legend-box hl-no">No. Rekening</span>
+              <span class="legend-box hl-bank">Bank</span>
+              <span class="legend-box hl-branch">Cabang</span>
+            </div>
+          </div>
+
+          <!-- Document Metrics Table -->
+          <div class="table-responsive mt-4">
+            <table class="table table-compact">
+              <thead>
+                <tr>
+                  <th>Analisis Dokumen</th>
+                  <th>Hasil</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Kualitas Gambar</td>
+                  <td>Baik</td>
+                  <td><svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></td>
+                </tr>
+                <tr>
+                  <td>Kejelasan Teks</td>
+                  <td>Baik</td>
+                  <td><svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></td>
+                </tr>
+                <tr>
+                  <td>Logo Bank Terdeteksi</td>
+                  <td>Mandiri</td>
+                  <td><svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></td>
+                </tr>
+                <tr>
+                  <td>Tanda Tangan / Cap</td>
+                  <td>Tidak diperlukan</td>
+                  <td><svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></td>
+                </tr>
+                <tr>
+                  <td>Indikasi Edit/Manipulasi</td>
+                  <td>Tidak terdeteksi</td>
+                  <td><svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></td>
+                </tr>
+                <tr>
+                  <td>Keaslian Dokumen</td>
+                  <td>98% (Asli)</td>
+                  <td><span class="badge badge-low">Asli</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="ai-log-box mt-4">
+            <div class="ai-bot-icon">🤖</div>
+            <p class="ai-log-text"><strong>Catatan AI:</strong> Dokumen terdeteksi asli, tidak ditemukan indikasi manipulasi pixel. Semua informasi konsisten dengan database bank.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM TABLE: RIWAYAT VALIDASI REKENING -->
+  <div class="card card-premium history-table-card mt-6">
+    <div class="card-header">
+      <h3 class="card-title">Riwayat Validasi Rekening</h3>
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Nama Pemilik</th>
+            <th>Bank</th>
+            <th>No. Rekening</th>
+            <th>Hasil Validasi</th>
+            <th>Similarity Score</th>
+            <th>Metode</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let acc of accountsHistory">
+            <td>{{ acc.onboardingDate }}</td>
+            <td class="font-bold">{{ acc.ownerName }}</td>
+            <td>{{ acc.bank }}</td>
+            <td class="text-mono">{{ acc.accountNumber }}</td>
+            <td>
+              <span class="text-success" *ngIf="acc.status === 'Terverifikasi'">Valid</span>
+              <span class="text-high" *ngIf="acc.status === 'Ditolak'">Tidak Cocok</span>
+            </td>
+            <td class="font-semibold" [ngClass]="{
+              'text-success': acc.similarityScore >= 80,
+              'text-high': acc.similarityScore < 80
+            }">{{ acc.similarityScore }}%</td>
+            <td>
+              <span class="badge badge-new" *ngIf="acc.source === 'Penny Drop'">Penny Drop</span>
+              <span class="badge badge-review" *ngIf="acc.source === 'Vision AI'">Vision AI</span>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="{
+                'badge-low': acc.status === 'Terverifikasi',
+                'badge-high': acc.status === 'Ditolak'
+              }">{{ acc.status }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

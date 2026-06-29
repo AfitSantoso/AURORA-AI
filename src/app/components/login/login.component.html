@@ -1,0 +1,80 @@
+<div class="login-wrapper">
+  <div class="login-container">
+    <div class="login-left">
+      <div class="left-overlay"></div>
+      <div class="left-content">
+        <h2>Sistem Komisi Dealer</h2>
+        <p>Verifikasi Multi-Layer Cepat, Aman, dan Tepercaya menggunakan Teknologi Vision AI & Penny Drop.</p>
+        <div class="feature-badges">
+          <span class="f-badge"><i class="icon-lock"></i> Trusted Repository</span>
+          <span class="f-badge"><i class="icon-cpu"></i> Vision AI Reader</span>
+          <span class="f-badge"><i class="icon-check"></i> Penny Drop Instant</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="login-right">
+      <div class="form-card">
+        <!-- Logo -->
+        <div class="brand-logo">
+          <span class="logo-bca">BCA</span><span class="logo-finance">finance</span>
+        </div>
+        
+        <div class="welcome-text">
+          <h3>Selamat Datang</h3>
+          <p>Masuk untuk melanjutkan ke aplikasi</p>
+        </div>
+
+        <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+          <div *ngIf="errorMessage" class="alert-error">
+            {{ errorMessage }}
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="username">Username</label>
+            <input 
+              type="text" 
+              id="username" 
+              name="username" 
+              class="form-control" 
+              [(ngModel)]="username" 
+              placeholder="Masukkan username (e.g. admin)"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <div class="password-input-wrapper">
+              <input 
+                [type]="showPassword ? 'text' : 'password'" 
+                id="password" 
+                name="password" 
+                class="form-control" 
+                [(ngModel)]="password" 
+                placeholder="Masukkan password (e.g. admin)"
+                required>
+              <button type="button" class="btn-toggle-password" (click)="togglePasswordVisibility()">
+                <svg *ngIf="!showPassword" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <svg *ngIf="showPassword" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="form-check">
+              <input type="checkbox" name="rememberMe" class="form-check-input" [(ngModel)]="rememberMe">
+              <span class="form-check-label">Ingat saya</span>
+            </label>
+            <a href="javascript:void(0)" class="forgot-password-link">Lupa password?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-masuk">Masuk</button>
+        </form>
+
+        <div class="footer-text">
+          <p>© 2025 BCA Finance. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

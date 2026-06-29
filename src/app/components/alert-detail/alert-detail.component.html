@@ -1,0 +1,195 @@
+<div class="detail-container" *ngIf="alert">
+  <!-- Top Nav Bar -->
+  <div class="top-nav">
+    <a routerLink="/alerts" class="back-link">
+      <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span>Kembali</span>
+    </a>
+    <div class="page-title">
+      <h2>Detail Alert</h2>
+    </div>
+    <span class="badge badge-header" [ngClass]="{
+      'badge-high': alert.riskLevel === 'High',
+      'badge-medium': alert.riskLevel === 'Medium',
+      'badge-low': alert.riskLevel === 'Low'
+    }">{{ alert.riskLevel }} RISK</span>
+  </div>
+
+  <div class="grid grid-2 detail-grid">
+    <!-- Left Column: Transaction Details & History -->
+    <div class="col-left">
+      <div class="card card-premium info-card">
+        <div class="card-header">
+          <h3 class="card-title">Informasi Transaksi</h3>
+        </div>
+        <div class="info-list">
+          <div class="info-row">
+            <span class="info-label">No. Alert</span>
+            <span class="info-value font-semibold text-primary">{{ alert.id }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Tanggal</span>
+            <span class="info-value">{{ alert.date }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Jenis Alert</span>
+            <span class="info-value">{{ alert.alertType }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Dealer/Showroom</span>
+            <span class="info-value">{{ alert.dealerName }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Cabang</span>
+            <span class="info-value">{{ alert.branch }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Nama Penerima</span>
+            <span class="info-value font-bold">{{ alert.recipientName }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Rekening Tujuan</span>
+            <span class="info-value text-mono">{{ alert.targetAccount }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Nominal Transaksi</span>
+            <span class="info-value font-bold text-lg text-primary">{{ formatCurrency(alert.amount) }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Periode Transaksi</span>
+            <span class="info-value">Mei 2025</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alert History Timeline -->
+      <div class="card card-premium timeline-card">
+        <div class="card-header">
+          <h3 class="card-title">Riwayat Alert</h3>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item" *ngFor="let step of alert.history">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <span class="timeline-date">{{ step.date }}</span>
+              <p class="timeline-message">{{ step.message }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: AI Risk Assessment & Relational Analysis -->
+    <div class="col-right">
+      <!-- AI Risk Score Card -->
+      <div class="card card-premium risk-score-card">
+        <div class="card-header">
+          <h3 class="card-title">AI Risk Score Assessment</h3>
+        </div>
+        <div class="risk-score-wrapper">
+          <div class="score-display" [ngClass]="{
+            'border-high': alert.riskLevel === 'High',
+            'border-medium': alert.riskLevel === 'Medium',
+            'border-low': alert.riskLevel === 'Low'
+          }">
+            <span class="score-num" [ngClass]="{
+              'text-high': alert.riskLevel === 'High',
+              'text-medium': alert.riskLevel === 'Medium',
+              'text-low': alert.riskLevel === 'Low'
+            }">{{ alert.riskScore }}</span>
+            <span class="score-total">/ 100</span>
+          </div>
+          
+          <div class="risk-label-container">
+            <span class="badge" [ngClass]="{
+              'badge-high': alert.riskLevel === 'High',
+              'badge-medium': alert.riskLevel === 'Medium',
+              'badge-low': alert.riskLevel === 'Low'
+            }">{{ alert.riskLevel }} Risk</span>
+          </div>
+        </div>
+
+        <div class="reasons-list-container">
+          <h4 class="section-subtitle">Alasan Alert oleh AI:</h4>
+          <ul class="ai-reasons">
+            <li *ngFor="let reason of alert.aiReasons" class="reason-item">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="#b91c1c" stroke-width="2.5" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <span>{{ reason }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- AI Relational Matching Details -->
+      <div class="card card-premium matching-card">
+        <div class="card-header">
+          <h3 class="card-title">Informasi AI Matching</h3>
+        </div>
+        
+        <div class="matching-metrics grid grid-3">
+          <div class="metric-box">
+            <span class="m-label">Confidence Score</span>
+            <span class="m-val" [class.text-high]="alert.aiMatchScore < 50">{{ alert.aiMatchScore }}%</span>
+          </div>
+          
+          <div class="metric-box">
+            <span class="m-label">Kemiripan Nama</span>
+            <span class="m-val">{{ alert.nameSimilarity }}%</span>
+          </div>
+          
+          <div class="metric-box">
+            <span class="m-label">Relasi ke Dealer</span>
+            <span class="m-val text-red" [class.text-red]="alert.internalRelationScore === 'Rendah'">{{ alert.internalRelationScore }}</span>
+            <span class="m-sub">Tidak Terverifikasi</span>
+          </div>
+        </div>
+
+        <div class="sources-container">
+          <h4 class="section-subtitle">Sumber Informasi AI</h4>
+          <div class="sources-checklist">
+            <div class="source-item">
+              <span class="check-box checked">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="3" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </span>
+              <span class="source-name">Database Internal</span>
+              <span class="source-status status-unfound">Tidak Ditemukan</span>
+            </div>
+            
+            <div class="source-item">
+              <span class="check-box checked">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="3" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </span>
+              <span class="source-name">Media Sosial</span>
+              <span class="source-status status-found">Ditemukan (X)</span>
+            </div>
+            
+            <div class="source-item">
+              <span class="check-box checked">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="3" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </span>
+              <span class="source-name">Website Perusahaan</span>
+              <span class="source-status status-unfound">Tidak Ditemukan</span>
+            </div>
+            
+            <div class="source-item">
+              <span class="check-box checked">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="3" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </span>
+              <span class="source-name">Berita & Publikasi</span>
+              <span class="source-status status-unfound">Tidak Ditemukan</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Workspace Actions Bar -->
+  <div class="action-footer card shadow-sm">
+    <button class="btn btn-secondary" routerLink="/alerts">Kembali ke Daftar</button>
+    <button class="btn btn-primary" (click)="startVerification()" *ngIf="alert.status !== 'Closed'">
+      Lanjutkan ke Workspace Verifikasi RM
+      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+  </div>
+</div>
