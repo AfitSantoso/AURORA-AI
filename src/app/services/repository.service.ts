@@ -12,6 +12,21 @@ export interface TrustedAccount {
   status: 'Terverifikasi' | 'Ditolak';
   similarityScore: number;
   source: 'Penny Drop' | 'Vision AI';
+  
+  // Scanned form additional fields
+  tipePenerima?: string;
+  jabatan?: string;
+  noKtp?: string;
+  noNpwp?: string;
+  noHp?: string;
+  atasNamaRekening?: string;
+  keterangan?: string;
+  dealerId?: string;
+  alamatDealer?: string;
+  tipeBank?: string;
+  kota?: string;
+  cabang?: string;
+  tarifPajak?: number;
 }
 
 export interface TransactionAlert {
@@ -76,7 +91,20 @@ export class RepositoryService {
           onboardingDate: '24/05/2025 10:45',
           status: 'Terverifikasi',
           similarityScore: 98,
-          source: 'Penny Drop'
+          source: 'Penny Drop',
+          tipePenerima: 'Individu',
+          jabatan: 'Sales/Sales Counter',
+          noKtp: '3171012345678001',
+          noNpwp: '01.234.567.8-012.000',
+          noHp: '081234567890',
+          atasNamaRekening: 'ANDI SETIAWAN',
+          keterangan: 'Komisi CS New Car',
+          dealerId: 'DLR-9988',
+          alamatDealer: 'Jl. Gatot Subroto No. 45, Jakarta Selatan',
+          tipeBank: 'Non BCA',
+          kota: 'Jakarta',
+          cabang: 'KCP Sudirman',
+          tarifPajak: 11
         },
         {
           id: 'ACC-002',
@@ -87,7 +115,20 @@ export class RepositoryService {
           onboardingDate: '22/05/2025 14:20',
           status: 'Terverifikasi',
           similarityScore: 95,
-          source: 'Penny Drop'
+          source: 'Penny Drop',
+          tipePenerima: 'Corporate',
+          jabatan: 'Dealer',
+          noKtp: '3172023456789002',
+          noNpwp: '02.345.678.9-023.000',
+          noHp: '081345678901',
+          atasNamaRekening: 'PT MAJU MOTOR',
+          keterangan: 'Komisi Dealer Bulanan',
+          dealerId: 'DLR-5544',
+          alamatDealer: 'Jl. Pemuda No. 12, Surabaya',
+          tipeBank: 'Non BCA',
+          kota: 'Surabaya',
+          cabang: 'KCP Pemuda',
+          tarifPajak: 11
         },
         {
           id: 'ACC-003',
@@ -98,7 +139,20 @@ export class RepositoryService {
           onboardingDate: '21/05/2025 09:15',
           status: 'Terverifikasi',
           similarityScore: 97,
-          source: 'Penny Drop'
+          source: 'Penny Drop',
+          tipePenerima: 'Corporate',
+          jabatan: 'Owner',
+          noKtp: '3173034567890103',
+          noNpwp: '03.456.789.0-034.000',
+          noHp: '081456789012',
+          atasNamaRekening: 'CV BERKAT JAYA',
+          keterangan: 'Klaim komisi insentif',
+          dealerId: 'DLR-7711',
+          alamatDealer: 'Jl. Merdeka No. 89, Bandung',
+          tipeBank: 'Non BCA',
+          kota: 'Bandung',
+          cabang: 'KCP Merdeka',
+          tarifPajak: 11
         },
         {
           id: 'ACC-004',
@@ -109,7 +163,20 @@ export class RepositoryService {
           onboardingDate: '20/05/2025 16:33',
           status: 'Terverifikasi',
           similarityScore: 100,
-          source: 'Penny Drop'
+          source: 'Penny Drop',
+          tipePenerima: 'Individu',
+          jabatan: 'Supervisor',
+          noKtp: '3174045678901204',
+          noNpwp: '04.567.890.1-045.000',
+          noHp: '081556789012',
+          atasNamaRekening: 'RINA WULANDARI',
+          keterangan: 'Komisi New Car SPV',
+          dealerId: 'DLR-3322',
+          alamatDealer: 'Jl. Asia Afrika No. 100, Bandung',
+          tipeBank: 'BCA',
+          kota: 'Bandung',
+          cabang: 'KCP Dago',
+          tarifPajak: 11
         },
         {
           id: 'ACC-005',
@@ -120,7 +187,20 @@ export class RepositoryService {
           onboardingDate: '19/05/2025 11:05',
           status: 'Ditolak',
           similarityScore: 48,
-          source: 'Penny Drop'
+          source: 'Penny Drop',
+          tipePenerima: 'Individu',
+          jabatan: 'Sales/Sales Counter',
+          noKtp: '3175056789012305',
+          noNpwp: '05.678.901.2-056.000',
+          noHp: '081667890123',
+          atasNamaRekening: 'JOKO PRASETYO',
+          keterangan: 'Insentif sales motor',
+          dealerId: 'DLR-1100',
+          alamatDealer: 'Jl. Pettarani No. 5, Makassar',
+          tipeBank: 'Non BCA',
+          kota: 'Makassar',
+          cabang: 'KCP Pettarani',
+          tarifPajak: 11
         }
       ];
       this.saveAccounts(mockAccounts);

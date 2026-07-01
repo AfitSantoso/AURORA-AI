@@ -203,6 +203,8 @@ body {
   font-weight: 600;
   border-radius: 9999px;
   text-transform: uppercase;
+  background-color: transparent !important;
+  border: 1px solid currentColor;
 }
 .badge-high {
   background-color: var(--risk-high-light);

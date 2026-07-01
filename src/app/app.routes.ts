@@ -7,12 +7,14 @@ import { AlertListComponent } from './components/alert-list/alert-list.component
 import { AlertDetailComponent } from './components/alert-detail/alert-detail.component';
 import { RmVerificationComponent } from './components/rm-verification/rm-verification.component';
 import { DdVerificationComponent } from './components/dd-verification/dd-verification.component';
+import { DealerListComponent } from './components/dealer-list/dealer-list.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'onboarding', component: OnboardingComponent },
+  { path: 'dealer-list', component: DealerListComponent },
   { path: 'repository', component: RepositoryComponent },
   { path: 'alerts', component: AlertListComponent },
   { path: 'alerts/:id', component: AlertDetailComponent },

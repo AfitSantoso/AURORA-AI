@@ -13,11 +13,17 @@
   <!-- Tab Switcher -->
   <div class="tabs-container">
     <button class="tab-btn" [class.active]="activeTab === 'penny'" (click)="switchTab('penny')">
-      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+        <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
+        <line x1="2" y1="10" x2="22" y2="10"></line>
+      </svg>
       Opsi 1: Validasi Penny Drop / Inquiry
     </button>
     <button class="tab-btn" [class.active]="activeTab === 'vision'" (click)="switchTab('vision')">
-      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+        <circle cx="12" cy="13" r="4"></circle>
+      </svg>
       Opsi 2: Validasi Dokumen (Vision AI)
     </button>
   </div>
@@ -32,69 +38,387 @@
     </div>
 
     <!-- Step 1: Input Form -->
-    <div class="card card-premium onboarding-card" *ngIf="pennyStep === 1">
-      <div class="card-header">
-        <h3 class="card-title">Tambah Rekening Dealer</h3>
+    <div class="card card-premium onboarding-card" *ngIf="pennyStep === 1" style="max-width: 900px; margin: 0 auto;">
+      <!-- Document Title & Header matching image -->
+
+      <div class="form-document-body">
+        <div class="form-document-title">Formulir Daftar Penerima Komisi</div>
+
+        <form (ngSubmit)="startPennyDrop()" #pennyFormObj="ngForm" class="mt-6">
+
+          <!-- Tipe Penerima -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Tipe Penerima</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom flex-row-layout">
+              <label class="radio-label mr-6">
+                <input type="radio" name="tipePenerima" [(ngModel)]="pennyForm.tipePenerima" value="Individu"
+                  class="custom-radio">
+                <span class="radio-check-box"></span>
+                <span>Individu</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="tipePenerima" [(ngModel)]="pennyForm.tipePenerima" value="Corporate"
+                  class="custom-radio">
+                <span class="radio-check-box"></span>
+                <span>Corporate</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Nama -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Nama</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="ownerName" [(ngModel)]="pennyForm.ownerName" required class="form-input-custom"
+                placeholder="Nama Lengkap">
+            </div>
+          </div>
+
+          <!-- Jabatan -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Jabatan</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom checkbox-grid-layout">
+              <label class="checkbox-label">
+                <input type="radio" name="jabatan" [(ngModel)]="pennyForm.jabatan" value="Sales/Sales Counter"
+                  class="custom-checkbox">
+                <span class="checkbox-check-box"></span>
+                <span>Sales/Sales Counter</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="radio" name="jabatan" [(ngModel)]="pennyForm.jabatan" value="Supervisor"
+                  class="custom-checkbox">
+                <span class="checkbox-check-box"></span>
+                <span>Supervisor</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="radio" name="jabatan" [(ngModel)]="pennyForm.jabatan" value="BM" class="custom-checkbox">
+                <span class="checkbox-check-box"></span>
+                <span>BM</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="radio" name="jabatan" [(ngModel)]="pennyForm.jabatan" value="Dealer"
+                  class="custom-checkbox">
+                <span class="checkbox-check-box"></span>
+                <span>Dealer</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="radio" name="jabatan" [(ngModel)]="pennyForm.jabatan" value="Owner"
+                  class="custom-checkbox">
+                <span class="checkbox-check-box"></span>
+                <span>Owner</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="radio" name="jabatan" [(ngModel)]="pennyForm.jabatan" value="COO" class="custom-checkbox">
+                <span class="checkbox-check-box"></span>
+                <span>COO</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Nama Panggilan -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Nama Panggilan</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="namaPanggilan" [(ngModel)]="pennyForm.namaPanggilan" class="form-input-custom"
+                placeholder="Nama Panggilan">
+            </div>
+          </div>
+
+          <!-- Nama Atasan -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Nama Atasan</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="namaAtasan" [(ngModel)]="pennyForm.namaAtasan" class="form-input-custom"
+                placeholder="Nama Atasan">
+            </div>
+          </div>
+
+          <!-- Kewarganegaraan -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Kewarganegaraan</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="kewarganegaraan" [(ngModel)]="pennyForm.kewarganegaraan"
+                class="form-input-custom" placeholder="Kewarganegaraan">
+            </div>
+          </div>
+
+          <!-- No. KTP / KITAS / Passpor -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">No. KTP / KITAS / Passpor</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="noKtp" [(ngModel)]="pennyForm.noKtp" class="form-input-custom"
+                placeholder="Nomor Identitas">
+            </div>
+          </div>
+
+          <!-- No. SIUP -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">No. SIUP</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="noSiup" [(ngModel)]="pennyForm.noSiup" class="form-input-custom"
+                placeholder="Nomor SIUP (Untuk Corporate)">
+            </div>
+          </div>
+
+          <!-- No. NPWP -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">No. NPWP</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="noNpwp" [(ngModel)]="pennyForm.noNpwp" class="form-input-custom"
+                placeholder="Nomor NPWP">
+            </div>
+          </div>
+
+          <!-- Nama NPWP -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Nama NPWP</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="namaNpwp" [(ngModel)]="pennyForm.namaNpwp" class="form-input-custom"
+                placeholder="Nama di NPWP">
+            </div>
+          </div>
+
+          <!-- Alamat NPWP -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Alamat NPWP</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <textarea name="alamatNpwp" [(ngModel)]="pennyForm.alamatNpwp" rows="3" class="form-textarea-custom"
+                placeholder="Alamat Terdaftar NPWP"></textarea>
+            </div>
+          </div>
+
+          <!-- Tanggal Lahir -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Tanggal Lahir</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="date" name="tanggalLahir" [(ngModel)]="pennyForm.tanggalLahir" class="form-input-custom">
+            </div>
+          </div>
+
+          <!-- Tempat Lahir -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Tempat Lahir</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="tempatLahir" [(ngModel)]="pennyForm.tempatLahir" class="form-input-custom"
+                placeholder="Tempat Lahir">
+            </div>
+          </div>
+
+          <!-- No. Telepon -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">No. Telepon</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="noTelepon" [(ngModel)]="pennyForm.noTelepon" class="form-input-custom"
+                placeholder="Nomor Telepon Rumah/Kantor">
+            </div>
+          </div>
+
+          <!-- No. Hp -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">No. Hp</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="noHp" [(ngModel)]="pennyForm.noHp" class="form-input-custom"
+                placeholder="Nomor Handphone">
+            </div>
+          </div>
+
+          <!-- Agama -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Agama</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="agama" [(ngModel)]="pennyForm.agama" class="form-input-custom"
+                placeholder="Agama">
+            </div>
+          </div>
+
+          <!-- Hobi -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Hobi</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="hobi" [(ngModel)]="pennyForm.hobi" class="form-input-custom" placeholder="Hobi">
+            </div>
+          </div>
+
+          <!-- Keterangan -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Keterangan</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="keterangan" [(ngModel)]="pennyForm.keterangan" class="form-input-custom"
+                placeholder="Keterangan Tambahan">
+            </div>
+          </div>
+
+
+          <!-- SECTION: ACCOUNT INFO -->
+          <div class="section-divider-bar">Account Info</div>
+
+          <!-- No. Rekening -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">No. Rekening</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="accountNumber" [(ngModel)]="pennyForm.accountNumber" required
+                class="form-input-custom" placeholder="Nomor Rekening Penerima Komisi">
+            </div>
+          </div>
+
+          <!-- Atas Nama Rekening -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Atas Nama Rekening</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="atasNamaRekening" [(ngModel)]="pennyForm.atasNamaRekening"
+                class="form-input-custom" placeholder="Nama Pemilik Rekening Sesuai Bank">
+            </div>
+          </div>
+
+          <!-- Bank -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Bank</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <select name="bank" [(ngModel)]="pennyForm.bank" class="form-select-custom">
+                <option value="BCA">Bank BCA</option>
+                <option value="Mandiri">Bank Mandiri</option>
+                <option value="BNI">Bank BNI</option>
+                <option value="BRI">Bank BRI</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tipe Bank -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Tipe Bank</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom flex-row-layout">
+              <label class="radio-label mr-6">
+                <input type="radio" name="tipeBank" [(ngModel)]="pennyForm.tipeBank" value="BCA" class="custom-radio">
+                <span class="radio-check-box"></span>
+                <span>Bank BCA</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="tipeBank" [(ngModel)]="pennyForm.tipeBank" value="Non BCA"
+                  class="custom-radio">
+                <span class="radio-check-box"></span>
+                <span>Bank Non BCA</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Kota -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Kota</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="kota" [(ngModel)]="pennyForm.kota" class="form-input-custom"
+                placeholder="Kota Pembukaan Rekening">
+            </div>
+          </div>
+
+          <!-- Cabang -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Cabang</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="cabang" [(ngModel)]="pennyForm.cabang" class="form-input-custom"
+                placeholder="Cabang Pembukaan Rekening">
+            </div>
+          </div>
+
+          <!-- Tarif Pajak (PPN) -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Tarif Pajak (PPN)</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom input-suffix-wrapper">
+              <input type="number" name="tarifPajak" [(ngModel)]="pennyForm.tarifPajak" class="form-input-custom pr-10"
+                placeholder="0" style="text-align: left;">
+              <span class="input-suffix">%</span>
+            </div>
+          </div>
+
+
+          <!-- SECTION: DEALER INFO -->
+          <div class="section-divider-bar">Dealer Info</div>
+
+          <!-- Dealer ID -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Dealer ID</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="dealerId" [(ngModel)]="pennyForm.dealerId" class="form-input-custom"
+                placeholder="Dealer ID">
+            </div>
+          </div>
+
+          <!-- Dealer Name -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Dealer Name</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="dealerName" [(ngModel)]="pennyForm.dealerName" required class="form-input-custom"
+                placeholder="Nama Dealer">
+            </div>
+          </div>
+
+          <!-- Alamat Dealer -->
+          <div class="form-row-custom">
+            <span class="form-label-custom">Alamat Dealer</span>
+            <span class="form-separator">:</span>
+            <div class="form-value-custom">
+              <input type="text" name="alamatDealer" [(ngModel)]="pennyForm.alamatDealer" class="form-input-custom"
+                placeholder="Alamat Dealer">
+            </div>
+          </div>
+
+
+
+          <!-- Kirim/Submit Button -->
+          <div class="form-actions-right mt-8 pt-4 border-t border-slate-100">
+            <button type="submit" [disabled]="!pennyFormObj.valid" class="btn btn-primary btn-lg px-8">Kirim & Mulai
+              Penny Drop</button>
+          </div>
+
+        </form>
       </div>
-      <form (ngSubmit)="startPennyDrop()" #pennyFormObj="ngForm">
-        <div class="grid grid-2">
-          <div class="form-group">
-            <label class="form-label">Nama Pemilik Rekening</label>
-            <input type="text" class="form-control" name="ownerName" [(ngModel)]="pennyForm.ownerName" required placeholder="Masukkan Nama Sesuai Bank">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Nama Dealer / Showroom</label>
-            <input type="text" class="form-control" name="dealerName" [(ngModel)]="pennyForm.dealerName" required placeholder="Masukkan Nama Dealer">
-          </div>
-        </div>
-        
-        <div class="grid grid-2">
-          <div class="form-group">
-            <label class="form-label">Bank</label>
-            <select class="form-control" name="bank" [(ngModel)]="pennyForm.bank">
-              <option value="Mandiri">Bank Mandiri</option>
-              <option value="BCA">Bank BCA</option>
-              <option value="BNI">Bank BNI</option>
-              <option value="BRI">Bank BRI</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Nomor Rekening</label>
-            <input type="text" class="form-control" name="accountNumber" [(ngModel)]="pennyForm.accountNumber" required placeholder="Masukkan Nomor Rekening">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Email Penerima Notifikasi (Opsional)</label>
-          <input type="email" class="form-control" name="email" [(ngModel)]="pennyForm.email" placeholder="e.g. dealer@email.com">
-        </div>
-
-        <div class="form-group mt-4">
-          <label class="form-check">
-            <input type="checkbox" name="agree" [(ngModel)]="pennyForm.agree" required class="form-check-input">
-            <span class="form-check-label">Saya menyatakan data di atas benar dan valid untuk komisi.</span>
-          </label>
-        </div>
-
-        <div class="form-actions-right">
-          <button type="submit" [disabled]="!pennyFormObj.valid" class="btn btn-primary">Lanjutkan</button>
-        </div>
-      </form>
     </div>
 
     <!-- Step 2: Penny Drop Loader -->
     <div class="card card-premium onboarding-card text-center py-8" *ngIf="pennyStep === 2">
       <div class="penny-drop-animation">
         <div class="bank-icon-pulse">
-          <svg viewBox="0 0 24 24" width="48" height="48" stroke="#0c3c86" stroke-width="1.5" fill="none"><path d="M3 22h18F"></path><line x1="6" y1="18" x2="6" y2="11"></line><line x1="10" y1="18" x2="10" y2="11"></line><line x1="14" y1="18" x2="14" y2="11"></line><line x1="18" y1="18" x2="18" y2="11"></line><path d="M12 2L2 7v3h20V7L12 2z"></path></svg>
+          <svg viewBox="0 0 24 24" width="48" height="48" stroke="#0c3c86" stroke-width="1.5" fill="none">
+            <path d="M3 22h18"></path>
+            <line x1="6" y1="18" x2="6" y2="11"></line>
+            <line x1="10" y1="18" x2="10" y2="11"></line>
+            <line x1="14" y1="18" x2="14" y2="11"></line>
+            <line x1="18" y1="18" x2="18" y2="11"></line>
+            <path d="M12 2L2 7v3h20V7L12 2z"></path>
+          </svg>
         </div>
         <div class="circular-progress-loop">
-          <span class="rp-text">Rp 1</span>
         </div>
       </div>
       <h3 class="mt-4 font-bold">Proses Validasi Rekening</h3>
       <p class="text-secondary text-sm">Sistem melakukan transfer penny drop / inquiry ke rekening tujuan...</p>
-      
+
       <div class="progress-container-onboard mt-6">
         <div class="progress-bar-onboard">
           <div class="progress-fill-onboard" [style.width.%]="pennyProgress"></div>
@@ -106,13 +430,15 @@
     <!-- Step 3: Hasil Inquiry dari Bank -->
     <div class="card card-premium onboarding-card" *ngIf="pennyStep === 3">
       <div class="inquiry-success-badge">
-        <svg viewBox="0 0 24 24" width="20" height="20" stroke="#198754" stroke-width="3" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="#198754" stroke-width="3" fill="none">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
         <span>Inquiry Berhasil</span>
       </div>
-      
+
       <h3 class="inquiry-title">Hasil Inquiry dari Bank</h3>
       <p class="inquiry-subtitle">Informasi diterima dari bank tujuan</p>
-      
+
       <div class="info-list inquiry-list card">
         <div class="info-row">
           <span class="info-label">Nama Pemilik Rekening (dari bank)</span>
@@ -166,9 +492,11 @@
             <span class="comp-label">Similarity Score</span>
             <span class="comp-val text-success font-bold">98%</span>
           </div>
-          
+
           <div class="verification-statement mt-4">
-            <svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
             <span>Rekening valid dan sesuai dengan nama pemilik dealer.</span>
           </div>
         </div>
@@ -194,11 +522,16 @@
         <h3 class="card-title">Upload Dokumen Rekening</h3>
         <p class="subtitle">Unggah bukti rekening koran atau buku tabungan dealer</p>
       </div>
-      
+
       <div class="upload-dropzone" (click)="triggerUploadClick()">
-        <input type="file" id="file-upload-input" (change)="onFileSelect($event)" class="file-input-hidden" accept="image/*,.pdf">
+        <input type="file" id="file-upload-input" (change)="onFileSelect($event)" class="file-input-hidden"
+          accept="image/*,.pdf">
         <div class="upload-icon">
-          <svg viewBox="0 0 24 24" width="48" height="48" stroke="#0c3c86" stroke-width="1.5" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <svg viewBox="0 0 24 24" width="48" height="48" stroke="#0c3c86" stroke-width="1.5" fill="none">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
         </div>
         <h4>Drag & drop file di sini atau klik untuk memilih file</h4>
         <p class="text-muted text-xs">Format yang didukung: JPG, PNG, PDF. Maksimal 10MB.</p>
@@ -206,12 +539,18 @@
 
       <div class="selected-file-row card mt-4" *ngIf="selectedFile">
         <div class="file-info-col">
-          <svg viewBox="0 0 24 24" width="20" height="20" stroke="#0c3c86" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="#0c3c86" stroke-width="2" fill="none">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
           <span class="file-name font-medium">{{ selectedFile.name }}</span>
           <span class="file-size text-muted">({{ selectedFile.size }})</span>
         </div>
         <button class="btn-remove-file" (click)="selectedFile = null">
-          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
         </button>
       </div>
 
@@ -223,17 +562,22 @@
     <!-- Step 2: Scanning Page -->
     <div class="card card-premium onboarding-card text-center py-8" *ngIf="visionStep === 2">
       <div class="scanning-graphics-container">
-        <div class="mock-bankbook-card">
-          <div class="scanner-line"></div>
-          <div class="bankbook-logo">mandiri</div>
-          <div class="bankbook-row-line width-70"></div>
-          <div class="bankbook-row-line width-50"></div>
-          <div class="bankbook-row-line width-80"></div>
+        <div class="radar-scanner-wrapper">
+          <div class="radar-sweep"></div>
+          <div class="radar-circle-inner"></div>
+          <div class="radar-center-dot"></div>
+          
+          <!-- 4 quadrant logos -->
+          <img src="googlelens.png" alt="Google Lens" class="radar-logo logo-tl">
+          <img src="Facebook_f_logo_(2019).svg.png" alt="Facebook" class="radar-logo logo-tr">
+          <img src="instagram.png" alt="Instagram" class="radar-logo logo-bl">
+          <img src="LinkedIn_logo_initials.png.png" alt="LinkedIn" class="radar-logo logo-br">
         </div>
       </div>
 
       <h3 class="mt-6 font-bold">Vision AI Memproses Dokumen</h3>
-      <p class="text-secondary text-sm">Vision AI sedang membaca logo bank, mengekstrak teks, dan memverifikasi keaslian...</p>
+      <p class="text-secondary text-sm">Vision AI sedang membaca logo bank, mengekstrak teks, dan memverifikasi
+        keaslian...</p>
 
       <div class="scanning-checklist mt-6">
         <div class="check-item" [class.checked]="visionProgress >= 20">
@@ -270,7 +614,7 @@
           <div class="card-header">
             <h3 class="card-title">Hasil Ekstraksi & Validasi AI</h3>
           </div>
-          
+
           <div class="ai-score-donut py-4 border-bottom">
             <div class="score-circle-green">
               <span class="score-percent">96%</span>
@@ -312,15 +656,21 @@
 
           <div class="verification-checks mt-4">
             <div class="check-row">
-              <svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
               <span>Nama sesuai master data dealer</span>
             </div>
             <div class="check-row">
-              <svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
               <span>Dokumen asli / legal</span>
             </div>
             <div class="check-row">
-              <svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
               <span>Konsistensi informasi internal bank</span>
             </div>
           </div>
@@ -335,7 +685,7 @@
           <div class="card-header">
             <h3 class="card-title">Detail Dokumen & Analisis AI</h3>
           </div>
-          
+
           <div class="heatmap-visual-wrapper">
             <!-- Simulated document scan card -->
             <div class="bankbook-scan-card">
@@ -348,23 +698,23 @@
                   <span class="highlight-label">BANK</span>
                   <span class="scan-value font-bold">Bank Mandiri KCP Jakarta Hayam Wuruk</span>
                 </div>
-                
+
                 <div class="scan-info-line highlight-name">
                   <span class="highlight-label">NAMA</span>
                   <span class="scan-value font-bold">ANDI SETIAWAN</span>
                 </div>
-                
+
                 <div class="scan-info-line highlight-no">
                   <span class="highlight-label">NO REK</span>
                   <span class="scan-value text-mono">1234 5678 9010</span>
                 </div>
-                
+
                 <div class="scan-info-line highlight-branch">
                   <span class="highlight-label">CABANG</span>
                   <span class="scan-value">Jakarta Barat</span>
                 </div>
               </div>
-              
+
               <div class="scan-card-footer">
                 <span class="stamp-verified">VERIFIED BY AI</span>
               </div>
@@ -393,27 +743,37 @@
                 <tr>
                   <td>Kualitas Gambar</td>
                   <td>Baik</td>
-                  <td><svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></td>
+                  <td><svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></td>
                 </tr>
                 <tr>
                   <td>Kejelasan Teks</td>
                   <td>Baik</td>
-                  <td><svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></td>
+                  <td><svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></td>
                 </tr>
                 <tr>
                   <td>Logo Bank Terdeteksi</td>
                   <td>Mandiri</td>
-                  <td><svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></td>
+                  <td><svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></td>
                 </tr>
                 <tr>
                   <td>Tanda Tangan / Cap</td>
                   <td>Tidak diperlukan</td>
-                  <td><svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></td>
+                  <td><svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></td>
                 </tr>
                 <tr>
                   <td>Indikasi Edit/Manipulasi</td>
                   <td>Tidak terdeteksi</td>
-                  <td><svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></td>
+                  <td><svg viewBox="0 0 24 24" width="16" height="16" stroke="#198754" stroke-width="2.5" fill="none">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></td>
                 </tr>
                 <tr>
                   <td>Keaslian Dokumen</td>
@@ -426,7 +786,8 @@
 
           <div class="ai-log-box mt-4">
             <div class="ai-bot-icon">🤖</div>
-            <p class="ai-log-text"><strong>Catatan AI:</strong> Dokumen terdeteksi asli, tidak ditemukan indikasi manipulasi pixel. Semua informasi konsisten dengan database bank.</p>
+            <p class="ai-log-text"><strong>Catatan AI:</strong> Dokumen terdeteksi asli, tidak ditemukan indikasi
+              manipulasi pixel. Semua informasi konsisten dengan database bank.</p>
           </div>
         </div>
       </div>

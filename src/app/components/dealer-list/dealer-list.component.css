@@ -1,0 +1,211 @@
+.dealer-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Dropdown styling */
+.filter-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.filter-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #334155;
+}
+.filter-select {
+  width: 280px;
+  background-color: white;
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* Document card resembling form */
+.dealer-doc-card {
+  padding: 2rem !important;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+/* Scanned header frame style */
+.form-header-document-table {
+  border: 2px solid #0c3c86;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #f8fafc;
+}
+.doc-table-main-title {
+  background-color: #0c3c86;
+  color: white;
+  text-align: center;
+  font-weight: 800;
+  padding: 12px;
+  font-size: 1.05rem;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #0c3c86;
+}
+.doc-sub-headers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid #cbd5e1;
+}
+.sub-header-cell {
+  padding: 10px 14px;
+  border-right: 1px solid #cbd5e1;
+  font-size: 0.85rem;
+  display: flex;
+  gap: 8px;
+}
+.sub-header-cell:last-child {
+  border-right: none;
+}
+.full-width-cell {
+  grid-column: span 3;
+  border-top: 1px solid #cbd5e1;
+  border-right: none;
+}
+.sub-label {
+  font-weight: 700;
+  color: #475569;
+}
+.sub-val {
+  color: #0f172a;
+  font-weight: 500;
+}
+
+/* Scanned Grid Table styles */
+.scanned-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
+.scanned-grid-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.scanned-grid-table th {
+  background-color: #f1f5f9;
+  color: #334155;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 10px 12px;
+  border-bottom: 2px solid #cbd5e1;
+  border-right: 1px solid #cbd5e1;
+  text-align: center;
+  vertical-align: middle;
+}
+.scanned-grid-table th:last-child {
+  border-right: none;
+}
+.scanned-grid-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  border-right: 1px solid #cbd5e1;
+  font-size: 0.8rem;
+  color: #334155;
+  vertical-align: middle;
+}
+.scanned-grid-table td:last-child {
+  border-right: none;
+}
+.scanned-grid-table tr:hover {
+  background-color: #f8fafc;
+}
+
+.col-subtext {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #64748b;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Column dimensions */
+.col-tipe { width: 100px; }
+.col-nama { width: 150px; }
+.col-jabatan { width: 120px; }
+.col-ktp { width: 110px; }
+.col-npwp { width: 120px; }
+.col-hp { width: 100px; }
+.col-norek { width: 110px; }
+.col-namarek { width: 140px; }
+.col-bank { width: 90px; }
+.col-keterangan { width: 120px; }
+
+/* Badges and tags */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background-color: transparent !important;
+  border: 1px solid currentColor;
+}
+.badge-individu {
+  color: #0369a1;
+}
+.badge-corporate {
+  color: #6b21a8;
+}
+.bank-tag {
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0c3c86;
+}
+
+/* Signatures section */
+.signature-box-wrapper-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #f8fafc;
+  max-width: 500px;
+}
+.signature-col-table {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.signature-col-table:first-child {
+  border-right: 1px solid #cbd5e1;
+}
+.sig-header-table {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #334155;
+  border-bottom: 1px solid #cbd5e1;
+  width: 100%;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+}
+.sig-space-table {
+  height: 60px;
+}
+.sig-footer-table {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+  border-top: 1px dashed #cbd5e1;
+  width: 80%;
+  padding-top: 4px;
+}
+.form-doc-code-table {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}

@@ -1,0 +1,81 @@
+<div class="dealer-list-container">
+  
+  <!-- Page Header -->
+  <div class="top-bar mb-6">
+    <div class="page-title">
+      <h1>Daftar Penerima Komisi Dealer</h1>
+      <p class="subtitle">Trusted Repository Data & Verification List</p>
+    </div>
+    
+    <!-- Dealer Filter Selector -->
+    <div class="filter-wrapper">
+      <label for="dealer-selector" class="filter-label">Pilih Dealer:</label>
+      <select id="dealer-selector" class="form-select-custom filter-select" [(ngModel)]="selectedDealerId" (change)="onDealerChange()">
+        <option value="ALL">-- Tampilkan Semua Dealer --</option>
+        <option *ngFor="let d of dealers" [value]="d.id">{{ d.name }} ({{ d.id }})</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Document Card resembling the scanned image style but premium -->
+  <div class="card card-premium dealer-doc-card">
+    
+    <!-- Scanned Form Outer Borders and Headers -->
+    <div class="form-header-document-table">
+      <div class="doc-table-main-title" style="border-bottom: none;">FORMULIR DAFTAR PENERIMA KOMISI DEALER CS NEW CAR</div>
+    </div>
+
+    <!-- Scanned Table Layout -->
+    <div class="scanned-table-wrapper mt-6">
+      <table class="scanned-grid-table">
+        <thead>
+          <tr>
+            <th class="col-tipe">Tipe penerima<br><span class="col-subtext">(Individu / Corporate)</span></th>
+            <th class="col-nama">Nama Penerima Komisi</th>
+            <th class="col-jabatan">Jabatan<br><span class="col-subtext">(Sales, SPV, BM, Owner, etc)</span></th>
+            <th class="col-ktp">No.KTP</th>
+            <th class="col-npwp">No. NPWP</th>
+            <th class="col-hp">No. HP</th>
+            <th class="col-norek">Nomor Rekening<br>Bank Penerima</th>
+            <th class="col-namarek">Nama Rekening<br>Bank Penerima</th>
+            <th class="col-bank">Bank Penerima</th>
+            <th class="col-keterangan">Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Empty State -->
+          <tr *ngIf="filteredAccounts.length === 0">
+            <td colspan="10" class="text-center text-muted py-6">
+              Tidak ada data penerima komisi terverifikasi untuk dealer ini.
+            </td>
+          </tr>
+          
+          <!-- Rows Loop -->
+          <tr *ngFor="let acc of filteredAccounts">
+            <td class="col-tipe text-center">
+              <span class="badge" [class.badge-individu]="acc.tipePenerima === 'Individu'" [class.badge-corporate]="acc.tipePenerima === 'Corporate'">
+                {{ acc.tipePenerima || 'Individu' }}
+              </span>
+            </td>
+            <td class="col-nama font-medium">{{ acc.ownerName }}</td>
+            <td class="col-jabatan">{{ acc.jabatan || 'Sales/Sales Counter' }}</td>
+            
+            <!-- Masked Columns: No.KTP, NPWP, No.HP -->
+            <td class="col-ktp text-mono text-center">{{ maskKtp(acc.noKtp) }}</td>
+            <td class="col-npwp text-mono text-center">{{ maskNpwp(acc.noNpwp) }}</td>
+            <td class="col-hp text-mono text-center">{{ maskHp(acc.noHp) }}</td>
+            
+            <td class="col-norek text-mono text-center">{{ acc.accountNumber }}</td>
+            <td class="col-namarek font-medium">{{ acc.atasNamaRekening || acc.ownerName }}</td>
+            <td class="col-bank text-center">
+              <span class="bank-tag">{{ acc.bank }}</span>
+            </td>
+            <td class="col-keterangan text-muted text-xs">{{ acc.keterangan || '-' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -17,10 +17,38 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   // Option 1: Penny Drop States
   pennyStep = 1; // 1: Form, 2: Inquiry Loader, 3: Bank Result, 4: AI Matching
   pennyForm = {
+    tipePenerima: 'Individu',
     ownerName: 'ANDI SETIAWAN',
-    dealerName: 'Dealer ABC',
-    bank: 'Mandiri',
+    jabatan: 'Sales/Sales Counter',
+    namaPanggilan: 'Andi',
+    namaAtasan: 'Budi Santoso',
+    kewarganegaraan: 'WNI',
+    noKtp: '3171012345678001',
+    noSiup: '',
+    noNpwp: '01.234.567.8-012.000',
+    namaNpwp: 'ANDI SETIAWAN',
+    alamatNpwp: 'Jl. Jenderal Sudirman No. 10, Jakarta Pusat',
+    tanggalLahir: '1990-05-15',
+    tempatLahir: 'Jakarta',
+    noTelepon: '021-5551234',
+    noHp: '081234567890',
+    agama: 'Islam',
+    hobi: 'Membaca',
+    keterangan: 'Verifikasi rekening komisi dealer',
+    
+    // Account Info
     accountNumber: '1234 5678 9010',
+    atasNamaRekening: 'ANDI SETIAWAN',
+    bank: 'Mandiri',
+    tipeBank: 'Non BCA',
+    kota: 'Jakarta',
+    cabang: 'KCP Sudirman',
+    tarifPajak: 11,
+    
+    // Dealer Info
+    dealerId: 'DLR-9988',
+    dealerName: 'Dealer ABC',
+    alamatDealer: 'Jl. Gatot Subroto No. 45, Jakarta Selatan',
     email: 'andi.setiawan@dealerabc.com',
     agree: true
   };
@@ -53,7 +81,11 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   // Verification List (for bottom history log display)
   accountsHistory: any[] = [];
 
-  constructor(private repoService: RepositoryService, private router: Router) {}
+  constructor(
+    private repoService: RepositoryService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     if (localStorage.getItem('aurora_auth') !== 'true') {
@@ -91,13 +123,14 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     this.pennyProgress = 0;
 
     this.pennyInterval = setInterval(() => {
-      this.pennyProgress += 20;
+      this.pennyProgress += 10;
       if (this.pennyProgress >= 100) {
         this.clearPennyTimer();
         this.inquiryTime = new Date().toLocaleString('id-ID', { hour12: false });
         this.pennyStep = 3;
       }
-    }, 400);
+      this.cdr.detectChanges();
+    }, 300);
   }
 
   clearPennyTimer() {
@@ -121,17 +154,58 @@ export class OnboardingComponent implements OnInit, OnDestroy {
       onboardingDate: now,
       status: 'Terverifikasi',
       similarityScore: 98,
-      source: 'Penny Drop'
+      source: 'Penny Drop',
+      tipePenerima: this.pennyForm.tipePenerima,
+      jabatan: this.pennyForm.jabatan,
+      noKtp: this.pennyForm.noKtp,
+      noNpwp: this.pennyForm.noNpwp,
+      noHp: this.pennyForm.noHp,
+      atasNamaRekening: this.pennyForm.atasNamaRekening,
+      keterangan: this.pennyForm.keterangan,
+      dealerId: this.pennyForm.dealerId,
+      alamatDealer: this.pennyForm.alamatDealer,
+      tipeBank: this.pennyForm.tipeBank,
+      kota: this.pennyForm.kota,
+      cabang: this.pennyForm.cabang,
+      tarifPajak: this.pennyForm.tarifPajak
     });
 
     // Reset Form & Step
     alert('Rekening berhasil diverifikasi dan disimpan ke Trusted Repository!');
     this.pennyStep = 1;
     this.pennyForm = {
+      tipePenerima: 'Individu',
       ownerName: '',
-      dealerName: 'Dealer ABC',
-      bank: 'Mandiri',
+      jabatan: 'Sales/Sales Counter',
+      namaPanggilan: '',
+      namaAtasan: '',
+      kewarganegaraan: 'WNI',
+      noKtp: '',
+      noSiup: '',
+      noNpwp: '',
+      namaNpwp: '',
+      alamatNpwp: '',
+      tanggalLahir: '',
+      tempatLahir: '',
+      noTelepon: '',
+      noHp: '',
+      agama: '',
+      hobi: '',
+      keterangan: '',
+      
+      // Account Info
       accountNumber: '',
+      atasNamaRekening: '',
+      bank: 'Mandiri',
+      tipeBank: 'Non BCA',
+      kota: '',
+      cabang: '',
+      tarifPajak: 0,
+      
+      // Dealer Info
+      dealerId: '',
+      dealerName: 'Dealer ABC',
+      alamatDealer: '',
       email: '',
       agree: true
     };
@@ -181,8 +255,10 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         this.clearVisionTimer();
         setTimeout(() => {
           this.visionStep = 3;
+          this.cdr.detectChanges();
         }, 300);
       }
+      this.cdr.detectChanges();
     }, 300);
   }
 
