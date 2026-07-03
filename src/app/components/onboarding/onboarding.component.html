@@ -828,7 +828,8 @@
               'text-high': acc.similarityScore < 80
             }">{{ acc.similarityScore }}%</td>
             <td>
-              <span class="badge badge-new" *ngIf="acc.source === 'Penny Drop'">Penny Drop</span>
+              <span class="badge badge-new" *ngIf="acc.source === 'Penny Drop' && acc.bank.toUpperCase() !== 'BCA'">Penny Drop</span>
+              <span class="badge badge-new" *ngIf="acc.source === 'Penny Drop' && acc.bank.toUpperCase() === 'BCA'">HIT API</span>
               <span class="badge badge-review" *ngIf="acc.source === 'Vision AI'">Vision AI</span>
             </td>
             <td>
